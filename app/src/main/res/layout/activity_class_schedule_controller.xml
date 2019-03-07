@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ClassScheduleControllerActivity">
+	
+	<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+		
+		<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+			
+			<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="服务器："
+					android:layout_gravity="center"
+					tools:ignore="HardcodedText"/>
+			
+			
+			<EditText
+					android:id="@+id/classScheduleControllerUrl"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:hint="服务端URL"
+					tools:ignore="HardcodedText"
+					android:inputType="textUri"
+					android:autofillHints="url"/>
+			
+			<ImageView
+					android:id="@+id/classScheduleControllerUrlState"
+					android:layout_height="match_parent"
+					android:layout_width="wrap_content"
+					android:contentDescription="aa"
+					tools:ignore="HardcodedText"
+					android:background="@drawable/close"/>
+			
+			<ImageButton
+					android:onClick="clearMessage"
+					android:id="@+id/classScheduleClearUrl"
+					android:layout_height="match_parent"
+					android:layout_width="wrap_content"
+					android:contentDescription="aa"
+					tools:ignore="HardcodedText"
+					android:background="@drawable/close_circle"/>
+		</LinearLayout>
+		
+		<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+			
+			<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="用户名："
+					tools:ignore="HardcodedText"/>
+			
+			<EditText
+					android:id="@+id/classScheduleControllerUser"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:hint="用户名"
+					android:layout_weight="1"
+					tools:ignore="HardcodedText"
+					android:inputType="text"
+					android:autofillHints="username"/>
+			
+			<ImageButton
+					android:onClick="clearMessage"
+					android:id="@+id/classScheduleClearUsername"
+					android:layout_height="match_parent"
+					android:layout_width="wrap_content"
+					android:contentDescription="aa"
+					tools:ignore="HardcodedText"
+					android:background="@drawable/close_circle"/>
+		
+		</LinearLayout>
+		
+		<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+			
+			
+			<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="密码："
+					tools:ignore="HardcodedText"/>
+			
+			<EditText
+					android:id="@+id/classScheduleControllerPassword"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:hint="密码"
+					android:inputType="textPassword"
+					tools:ignore="HardcodedText"
+					android:autofillHints="password"/>
+			
+			<ImageButton
+					android:onClick="clearMessage"
+					android:id="@+id/classScheduleClearPassword"
+					android:layout_height="match_parent"
+					android:layout_width="wrap_content"
+					android:contentDescription="aa"
+					tools:ignore="HardcodedText"
+					android:background="@drawable/close_circle"/>
+		</LinearLayout>
+		
+		<HorizontalScrollView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+			
+			<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content">
+				
+				<Button
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:onClick="loginTest"
+						android:text="登录测试"
+						tools:ignore="ButtonStyle,HardcodedText"/>
+				
+				<Button
+						android:onClick="tokenTest"
+						android:text="秘钥测试"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						tools:ignore="ButtonStyle,HardcodedText"/>
+			</LinearLayout>
+		</HorizontalScrollView>
+	</LinearLayout>
+</ScrollView>

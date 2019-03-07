@@ -1,0 +1,6 @@
+<resources>
+	<string name="app_name">TechTest</string>
+	<string name="title_activity_encryption">EncryptionActivity</string>
+	<string name="title_activity_qrcode_test">QRCodeTestActivity</string>
+	<string name="title_activity_class_schedule_controller">ClassScheduleControllerActivity</string>
+</resources>

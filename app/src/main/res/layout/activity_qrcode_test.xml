@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".QRCodeTestActivity">
+	
+	<Button
+			android:id="@+id/QRCodeTest_scanTestButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:onClick="onClick"
+			android:text="开始扫描"
+			tools:ignore="HardcodedText" />
+	
+	<TextView
+			android:id="@+id/QRCodeTest_outputTextView"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center" />
+
+</LinearLayout>

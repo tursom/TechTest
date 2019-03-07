@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".EncryptionActivity">
+	
+	<EditText
+			android:id="@+id/encryptionStrEditText"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="加密字符串"
+			tools:ignore="HardcodedText,LabelFor,TextFields" />
+	
+	<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+		
+		<com.zhy.view.flowlayout.FlowLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+			
+			<Button
+					android:id="@+id/encryptionMD5Button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:onClick="onClick"
+					android:text="MD5"
+					tools:ignore="HardcodedText" />
+			
+			<Button
+					android:id="@+id/encryptionSHAButton"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:onClick="onClick"
+					android:text="SHA"
+					tools:ignore="HardcodedText" />
+			
+			<Button
+					android:id="@+id/encryptionSHA1Button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:onClick="onClick"
+					android:text="SHA-1"
+					tools:ignore="HardcodedText" />
+			
+			<Button
+					android:id="@+id/encryptionSHA256Button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:onClick="onClick"
+					android:text="SHA-256"
+					tools:ignore="HardcodedText" />
+			
+			<Button
+					android:id="@+id/encryptionSHA384Button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:onClick="onClick"
+					android:text="SHA-384"
+					tools:ignore="HardcodedText" />
+			
+			<Button
+					android:id="@+id/encryptionSHA512Button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:onClick="onClick"
+					android:text="SHA-512"
+					tools:ignore="HardcodedText" />
+		</com.zhy.view.flowlayout.FlowLayout>
+	</ScrollView>
+	
+	<EditText
+			android:id="@+id/encryptionAnswerEditText"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="answer"
+			tools:ignore="HardcodedText,LabelFor,TextFields" />
+
+</LinearLayout>
