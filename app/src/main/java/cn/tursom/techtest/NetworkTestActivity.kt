@@ -1,25 +1,23 @@
 package cn.tursom.techtest
 
 import android.os.Bundle
+import android.os.SystemClock.sleep
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
-import android.util.Log
-import android.view.View
 import android.widget.ScrollView
 import android.widget.TextView
-import cn.tursom.android.client.SocketConnect
 import cn.tursom.socket.client.NioClient
 import cn.tursom.socket.server.MultithreadingSocketServer
 import cn.tursom.socket.server.SocketServer
-import cn.tursom.tools.getTAG
-import cn.tursom.tools.getWIFILocalIpAddress
+import cn.tursom.tools.localIpv4Address
+import cn.tursom.tools.sendGet
 import cn.tursom.tools.toUTF8String
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
+/**
+ * 使用anko来处理布局
+ */
 class NetworkTestActivity : AppCompatActivity() {
 	private lateinit var networkTestShowTextView: TextView
 	private lateinit var printScrollView: ScrollView
@@ -28,13 +26,14 @@ class NetworkTestActivity : AppCompatActivity() {
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-//		setContentView(R.layout.activity_network_test)
 		
+		val t1 = System.currentTimeMillis()
 		//初始化view变量
 		initView()
+		val t2 = System.currentTimeMillis()
 		
 		//输出ready提示已完成准备工作
-		println("ready")
+		println("ready on ${t2 - t1}ms")
 	}
 	
 	
@@ -42,7 +41,6 @@ class NetworkTestActivity : AppCompatActivity() {
 	 * 复原屏幕内容
 	 */
 	override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-		Log.d(TAG, "onRestoreInstanceState:")
 		super.onRestoreInstanceState(savedInstanceState)
 		savedInstanceState?.getString("text")?.let {
 			networkTestShowTextView.text = it
@@ -53,22 +51,22 @@ class NetworkTestActivity : AppCompatActivity() {
 	 * 保存屏幕内容
 	 */
 	override fun onSaveInstanceState(outState: Bundle?) {
-		Log.d(TAG, "onSaveInstanceState:")
 		super.onSaveInstanceState(outState)
 		outState?.putString("text", networkTestShowTextView.text.toString())
 	}
 	
-	fun connectToServer(host: String, port: Int) {
-		GlobalScope.launch(Dispatchers.IO) {
+	private fun connectToServer(host: String, port: Int) {
+		doAsync {
 			try {
 				//先关闭已有连接
 				nioClient?.close()
 				nioClient = NioClient(host, port) { msg ->
-					println(
+					if (msg.isNotEmpty()) println(
 						"Test Client: receive from $address count ${msg.count()}:\n" +
 								"${msg.toUTF8String()}\n" +
 								"===================="
 					)
+					sleep(100)
 					read()
 				}
 				nioClient!!.read()
@@ -81,7 +79,6 @@ class NetworkTestActivity : AppCompatActivity() {
 	}
 	
 	override fun onDestroy() {
-		Log.d(TAG, "onDestroy:")
 		super.onDestroy()
 		nioClient?.close()
 		socketServer?.close()
@@ -98,13 +95,6 @@ class NetworkTestActivity : AppCompatActivity() {
 	private fun _LinearLayout.initServiceFunction() {
 		horizontalScrollView().lparams(width = matchParent, height = wrapContent).linearLayout {
 			button("清屏") { onClick { networkTestShowTextView.text = "" } }
-			val networkTestGetWeatherEditText = editText { hint = "城市" }
-			button("获取天气").onClick {
-				val city = networkTestGetWeatherEditText.text.toString()
-				networkTestGetWeatherEditText.setText("")
-				if (city.count() == 0) return@onClick
-				getWeather(city)
-			}
 			val port = editText {
 				hint = "服务端口"
 				inputType = InputType.TYPE_CLASS_NUMBER
@@ -114,7 +104,7 @@ class NetworkTestActivity : AppCompatActivity() {
 				if (portStr.isEmpty()) {
 					println("port is null")
 				} else {
-					val port = portStr.toIntOrNull() ?: return@onClick
+					@Suppress("NAME_SHADOWING") val port = portStr.toIntOrNull() ?: return@onClick
 					startTestServer(port)
 					connectToServer("127.0.0.1", port)
 				}
@@ -124,7 +114,17 @@ class NetworkTestActivity : AppCompatActivity() {
 				println("Test Server: server closed")
 			}
 			button("WiFi IP").onClick {
-				println("WiFi IP address: ${getWIFILocalIpAddress(this@NetworkTestActivity)}")
+				println("WiFi IP address: $localIpv4Address")
+			}
+			val urlTestEditText = editText { hint = "URL" }
+			button("测试URL").onClick {
+				doAsync {
+					try {
+						println(sendGet(urlTestEditText.text.toString()))
+					} catch (e: Exception) {
+						println(e.getStackTraceString())
+					}
+				}
 			}
 		}
 	}
@@ -161,6 +161,11 @@ class NetworkTestActivity : AppCompatActivity() {
 					println(e.getStackTraceString())
 				}
 			}
+			
+			button("断开").onClick {
+				nioClient?.close()
+				println("client closed")
+			}
 		}
 	}
 	
@@ -173,7 +178,7 @@ class NetworkTestActivity : AppCompatActivity() {
 	}
 	
 	private fun startTestServer(port: Int) {
-		GlobalScope.launch(Dispatchers.IO) {
+		doAsync {
 			try {
 				socketServer?.close()
 				socketServer = MultithreadingSocketServer(port, 4) {
@@ -195,50 +200,23 @@ class NetworkTestActivity : AppCompatActivity() {
 				println(e.getStackTraceString())
 			}
 		}
-		println("server running in ${getWIFILocalIpAddress(this)}:$port")
-	}
-	
-	/**
-	 * 获取天气
-	 * @param city 城市名
-	 */
-	private fun getWeather(city: String) {
-		Log.d(TAG, "getWeather:")
-		//连接到服务器
-		val net = SocketConnect("tursom.cn", 15432)
-		//添加任务
-		net.execute {
-			println("getWeather: connected to ${net.address}")
-			net.send(city)
-			val recv = net.recv(10240) ?: "null"
-			println(recv)
-			println("getWeather: end")
-			//关闭连接
-			net.close()
-		}
+		println("server running in $localIpv4Address:$port")
 	}
 	
 	private fun println(any: Any) = println(any.toString())
 	private fun println(text: String = "") = runOnUiThread {
 		networkTestShowTextView.append(text)
 		networkTestShowTextView.append("\n")
-		printScrollView.post { printScrollView.smoothScrollTo(0, networkTestShowTextView.bottom) }
+		scrollToBottom()
 	}
 	
 	private fun print(any: Any) = print(any.toString())
-	private fun print(text: String) {
-		runOnUiThread {
-			networkTestShowTextView.append(text)
-			printScrollView.post { printScrollView.smoothScrollTo(0, networkTestShowTextView.bottom) }
-		}
+	private fun print(text: String) = runOnUiThread {
+		networkTestShowTextView.append(text)
+		scrollToBottom()
 	}
 	
-	private fun <T : View> Int.view() = findViewById<T>(this)!!
-	
-	/**
-	 * 伴生对象
-	 */
-	companion object {
-		val TAG = getTAG(this::class.java)
+	private fun scrollToBottom() = printScrollView.post {
+		printScrollView.smoothScrollTo(0, networkTestShowTextView.bottom)
 	}
 }

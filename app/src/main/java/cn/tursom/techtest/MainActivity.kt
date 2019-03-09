@@ -1,26 +1,23 @@
 package cn.tursom.techtest
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import cn.tursom.tools.makeToast
+import android.support.v7.app.AppCompatActivity
 import cn.tursom.tools.startActivity
+import org.jetbrains.anko.button
+import org.jetbrains.anko.scrollView
+import org.jetbrains.anko.sdk27.coroutines.onClick
+import org.jetbrains.anko.verticalLayout
 
 class MainActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
-
-    fun onClick(view: View?) {
-        when (view?.id) {
-            R.id.mainSensorTestButton -> startActivity(SensorActivity::class.java)
-            R.id.mainNetworkTestButton -> startActivity(NetworkTestActivity::class.java)
-            R.id.mainEncryptionButton -> startActivity(EncryptionActivity::class.java)
-            R.id.mainQRCodeTest -> startActivity(QRCodeTestActivity::class.java)
-            R.id.mainClassScheduleController -> startActivity(ClassScheduleControllerActivity::class.java)
-            else -> makeToast("无法找到对应的界面")
-        }
-    }
+	
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		scrollView().verticalLayout {
+			button("传感器测试").onClick { startActivity(SensorActivity::class.java) }
+			button("网络传输测试").onClick { startActivity(NetworkTestActivity::class.java) }
+			button("加密测试").onClick { startActivity(EncryptionActivity::class.java) }
+			button("二维码测试").onClick { startActivity(QRCodeTestActivity::class.java) }
+			button("课表推送控制器").onClick { startActivity(ClassScheduleControllerActivity::class.java) }
+		}
+	}
 }

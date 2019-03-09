@@ -1,6 +1,7 @@
 package cn.tursom.socket.server
 
 import cn.tursom.socket.BaseSocket
+import org.jetbrains.anko.doAsync
 import java.net.ServerSocket
 import java.net.SocketTimeoutException
 
@@ -36,16 +37,15 @@ class MultithreadingSocketServer(
 								e.exception()
 							}
 						}
-					} catch (e: SocketTimeoutException) {
-						if (e.message != "android.system.ErrnoException: accept failed: EAGAIN (Try again)") {
-							e.exception()
-						}
 					} catch (e: Exception) {
-						e.exception()
-						break
+						if (e !is SocketTimeoutException || e.message != "android.system.ErrnoException: accept failed: EAGAIN (Try again)") {
+							e.exception()
+							break
+						}
 					}
 				}
 			}
+			thread.name = "SocketServer-$i"
 			thread.start()
 			threadList.add(thread)
 		}

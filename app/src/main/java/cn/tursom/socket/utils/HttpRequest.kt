@@ -57,7 +57,7 @@ fun sendGet(
 		Pair("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)"))
 ): String {
 	val paramSB = StringBuilder()
-	return sendGet(url, run {
+	return cn.tursom.tools.sendGet(url, run {
 		param.forEach {
 			paramSB.append("${URLEncoder.encode(it.key, "UTF-8")}=${URLEncoder.encode(it.value, "UTF-8")}&")
 		}
@@ -104,7 +104,7 @@ fun sendGet(
 		Pair("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)"))
 ) {
 	val paramSB = StringBuilder()
-	sendGet(url, outputStream, run {
+	cn.tursom.tools.sendGet(url, outputStream, run {
 		param.forEach {
 			paramSB.append("${URLEncoder.encode(it.key, "UTF-8")}=${URLEncoder.encode(it.value, "UTF-8")}&")
 		}
@@ -114,7 +114,7 @@ fun sendGet(
 
 fun getFile(url: String, filename: String) {
 	File(filename).outputStream().use {
-		sendGet(url, it)
+		cn.tursom.tools.sendGet(url, it)
 	}
 }
 
@@ -150,7 +150,7 @@ fun sendHead(
 		Pair("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)"))
 ): Map<String, List<String>> {
 	val paramSB = StringBuilder()
-	return sendHead(url, run {
+	return cn.tursom.tools.sendHead(url, run {
 		param.forEach {
 			paramSB.append("${URLEncoder.encode(it.key, "UTF-8")}=${URLEncoder.encode(it.value, "UTF-8")}&")
 		}
@@ -214,7 +214,7 @@ fun sendPost(
 		sb.append("${URLEncoder.encode(key, "utf-8")}=${URLEncoder.encode(value, "utf-8")}&")
 	}
 	sb.deleteCharAt(sb.length - 1)
-	return sendPost(url, sb.toString().toByteArray(), headers)
+	return cn.tursom.tools.sendPost(url, sb.toString().toByteArray(), headers)
 }
 
 @Throws(Exception::class)
@@ -265,7 +265,7 @@ fun sendPost(
 		sb.append("${URLEncoder.encode(key, "utf-8")}=${URLEncoder.encode(value, "utf-8")}&")
 	}
 	sb.deleteCharAt(sb.length - 1)
-	sendPost(url, outputStream, sb.toString().toByteArray(), headers)
+	cn.tursom.tools.sendPost(url, outputStream, sb.toString().toByteArray(), headers)
 }
 
 @Suppress("MemberVisibilityCanBePrivate")

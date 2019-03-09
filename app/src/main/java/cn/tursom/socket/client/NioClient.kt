@@ -34,7 +34,7 @@ class NioClient(
 		bufferSize: Int = 4096,
 		onWriteComplete: NioClient.(result: Int, buffer: ByteBuffer) -> Unit = { _, _ -> },
 		onReadComplete: NioClient.(message: ByteArray) -> Unit
-	) : this(host, port, bufferSize, onWriteComplete, { _, buffer ->
+	) : this(host, port, bufferSize, onWriteComplete, onReadComplete@{ result, buffer ->
 		buffer.flip()
 		val limits = buffer.limit()
 		val bytes = ByteArray(limits)
